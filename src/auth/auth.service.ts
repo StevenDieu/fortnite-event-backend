@@ -1,14 +1,14 @@
 import {Injectable, InternalServerErrorException} from '@nestjs/common';
 import {sign} from 'jsonwebtoken';
+import {jwtKey} from "../config/key/keyAuth";
 
 export enum Provider {
     GOOGLE = 'google',
+    FACEBOOK = 'facebook',
 }
 
 @Injectable()
 export class AuthService {
-
-    private readonly JWT_SECRET_KEY = 'mg^^fy,@i=kCgqSr{56F@xSNHyc'; // <- replace this with your secret key
 
     constructor(/*private readonly usersService: UsersService*/) {
     }
@@ -29,7 +29,7 @@ export class AuthService {
                 provider,
             };
 
-            return sign(payload, this.JWT_SECRET_KEY, {expiresIn: 3600});
+            return sign(payload, jwtKey.secretOrKey, {expiresIn: 3600});
         } catch (err) {
             throw new InternalServerErrorException('validateOAuthLogin', err.message);
         }
